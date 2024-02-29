@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ProductCategory {
+  id       String    @id @default(cuid())
+  name     String
+  products Product[] @relation("ProductToProductCategory")
+}
+
+model Product {
+  id               String            @id @default(cuid())
+  name             String
+  description      String
+  shortDescription String
+  url              String
+  image            String?
+  price            Int
+  currency         Currency
+  source           ProductSource
+  createAt         DateTime          @default(now())
+  updateAt         DateTime          @updatedAt
+  categories       ProductCategory[] @relation("ProductToProductCategory")
+}
+
+enum Currency {
+  MKD
+  EUR
+  USD
+}
+
+enum ProductSource {
+  Epharmacy
+  Apteka24
+}
