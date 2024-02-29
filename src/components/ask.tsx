@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
 import SearchIllustration from "./svg/search-illustration";
+import Link from "next/link";
 
 type AskProps = {} & React.HTMLAttributes<HTMLDivElement>;
 
@@ -36,15 +37,17 @@ export default function Ask({ className, ...props }: AskProps) {
 	}
 
 	return (
-		<div className={cn('flex flex-col gap-y-6', className)} {...props}>
+		<div className={cn('flex flex-col gap-y-10', className)} {...props}>
 			<div className="flex flex-col gap-y-2 items-center justify-center">
-				<div className="relative w-full aspect-[762/232] max-w-[16rem]">
-					<Image src='/aptex-logo.png' alt="Aptex Logo" fill className="object-contain w-full h-full" />
-				</div>
+				<Link href="/" className="w-full h-full flex items-center justify-center">
+					<div className="flex-1 relative aspect-[762/232] max-w-[16rem]">
+						<Image src='/aptex-logo.png' alt="Aptex Logo" fill className="object-contain w-full h-full" />
+					</div>
+				</Link>
 				<h1 className="text-center">Tell us what you need, we&apos;ve got you!</h1>
 			</div>
 			<div className="w-full flex flex-row gap-x-2">
-				<Input placeholder="Your question..." className="flex-1" onChange={(ev) => void setInput(ev.target.value)} value={input} />
+				<Input placeholder="Explain what you're looking for..." className="flex-1" onChange={(ev) => void setInput(ev.target.value)} value={input} />
 				<Button onClick={() => void ask()}>Find</Button>
 			</div>
 			{
@@ -58,7 +61,7 @@ export default function Ask({ className, ...props }: AskProps) {
 				(results.length > 0 || loading) && (
 
 					<div className="w-full rounded-lg border p-3">
-						<h1 className="mb-4">Results:</h1>
+						<h1 className="mb-1">Results:</h1>
 						<div className="relative grid grid-cols-2 gap-2 min-h-[10rem]">
 							{loading && (
 								<Skeleton className="absolute top-0 left-0 flex items-center justify-center w-full h-full z-10 col-span-2">
@@ -68,7 +71,7 @@ export default function Ask({ className, ...props }: AskProps) {
 							{
 								results.map(({ product, score }, idx) => product && (
 									<a key={idx} href={product.url} className="block w-full h-full">
-										<div key={idx} className="relative w-full h-full flex flex-col gap-x-2 border rounded-lg">
+										<div key={idx} className="relative w-full h-full flex flex-col justify-between gap-x-2 border rounded-lg">
 											<div className="w-full aspect-video rounded-lg">
 												{
 													product.image ? (
@@ -82,11 +85,12 @@ export default function Ask({ className, ...props }: AskProps) {
 												}
 											</div>
 
-											<div className="text-sm p-2">
+											<div className="w-full text-sm p-2">
 												<h2>{product.name}</h2>
+												<p className="text-right font-bold">{product.price} {product.currency}</p>
 											</div>
 
-											<div className={cn("size-3 mr-1 mb-1 rounded-full absolute bottom-0 right-0", getScoreColorClassName(score))} />
+											{/* <div className={cn("size-3 mr-1 mb-1 rounded-full absolute bottom-0 right-0", getScoreColorClassName(score))} /> */}
 										</div>
 									</a>
 								))
